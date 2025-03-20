@@ -1,0 +1,26 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Custom styles */
+.btn {
+  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700;
+}
+
+.delete {
+  @apply bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700;
+}
+
+.card {
+  @apply bg-white shadow-md rounded-lg p-6;
+}
+
+.container {
+  @apply max-w-2xl mx-auto mt-10;
+}
+
+.total {
+  @apply text-lg font-bold text-gray-900;
+}
+
+/* This file is for your main application CSS */
