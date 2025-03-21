@@ -13,6 +13,7 @@
   row_click={fn {_id, cart} -> JS.navigate(~p"/carts/#{cart}") end}
 >
   <:col :let={{_id, cart}} label="ID">{cart.id}</:col>
+  <:col :let={{_id, cart}} label="Total">{Checkout.Orders.total(cart)}</:col>
   <:col :let={{_id, cart}} label="Date Created">{cart.inserted_at}</:col>
   <:col :let={{_id, cart}} label="Date Updated">{cart.updated_at}</:col>
   <:action :let={{_id, cart}}>

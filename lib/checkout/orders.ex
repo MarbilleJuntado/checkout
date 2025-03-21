@@ -101,4 +101,20 @@ defmodule Checkout.Orders do
   def change_cart(%Cart{} = cart, attrs \\ %{}) do
     Cart.changeset(cart, attrs)
   end
+
+  @doc """
+  Returns total value of cart items
+
+  ## Examples
+
+      iex> total(cart)
+      38.0
+  """
+  def total(%Cart{} = cart) do
+    cart.items
+    |> Enum.map(fn {product, count} -> Checkout.PriceRules.price(product, count) end)
+    |> Enum.sum()
+    |> Kernel.*(1.0)
+    |> Float.round(2)
+  end
 end

@@ -1,4 +1,4 @@
-defmodule Checkout.PricingRules do
+defmodule Checkout.PriceRules do
   @products %{
     "GR1" => 3.11,
     "SR1" => 5.00,
