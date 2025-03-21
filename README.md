@@ -32,7 +32,6 @@ Total price expected: £16.61
 Basket: GR1,CF1,SR1,CF1,CF1
 Total price expected: £30.57
 ```
-
 ## Installation
 Make sure to install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 ```
@@ -69,3 +68,5 @@ http://localhost:4000/carts/:cart_id/edit
 ```
 docker-compose run test
 ```
+## Live Demo
+https://checkout-solitary-breeze-1566.fly.dev/

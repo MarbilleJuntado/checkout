@@ -5,6 +5,10 @@ ARG GROUP_ID
 
 WORKDIR /app
 
+# install npm dependencies
+COPY assets/package.json assets/package-lock.json ./assets/
+RUN cd assets && npm ci
+
 COPY mix.exs .
 COPY mix.lock .
 
