@@ -10,10 +10,14 @@ defmodule CheckoutWeb.CartLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    cart = Orders.get_cart!(id)
+    total = Orders.total(cart)
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:cart, Orders.get_cart!(id))}
+     |> assign(:cart, cart)
+     |> assign(:total, total)}
   end
 
   defp page_title(:show), do: "Show Cart"
