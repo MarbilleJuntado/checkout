@@ -8,9 +8,22 @@
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Items">{@cart.items}</:item>
-</.list>
+<div class="border-t pt-4">
+  <h2 class="text-lg font-semibold">Cart</h2>
+  <%= if map_size(@cart.items) == 0 do %>
+    <p class="text-gray-500 italic">Cart is empty.</p>
+  <% else %>
+    <ul class="list-none space-y-2">
+      <%= for {product_code, qty} <- @cart.items do %>
+        <li class="flex justify-between items-center border-b pb-2">
+          <span class="text-lg">
+            {get_in(Checkout.Utils.products(), [product_code, "name"])} ({product_code}) x {qty}
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
 
 <.back navigate={~p"/carts"}>Back to carts</.back>
 

@@ -8,7 +8,7 @@ defmodule Checkout.OrdersTest do
 
     import Checkout.OrdersFixtures
 
-    @invalid_attrs %{items: nil}
+    @invalid_attrs %{items: []}
 
     test "list_carts/0 returns all carts" do
       cart = cart_fixture()
@@ -21,10 +21,10 @@ defmodule Checkout.OrdersTest do
     end
 
     test "create_cart/1 with valid data creates a cart" do
-      valid_attrs = %{items: %{}}
+      valid_attrs = %{items: %{"GR1" => 1}}
 
       assert {:ok, %Cart{} = cart} = Orders.create_cart(valid_attrs)
-      assert cart.items == %{}
+      assert cart.items == %{"GR1" => 1}
     end
 
     test "create_cart/1 with invalid data returns error changeset" do
@@ -33,10 +33,10 @@ defmodule Checkout.OrdersTest do
 
     test "update_cart/2 with valid data updates the cart" do
       cart = cart_fixture()
-      update_attrs = %{items: %{}}
+      update_attrs = %{items: %{"GR1" => 2}}
 
       assert {:ok, %Cart{} = cart} = Orders.update_cart(cart, update_attrs)
-      assert cart.items == %{}
+      assert cart.items == %{"GR1" => 2}
     end
 
     test "update_cart/2 with invalid data returns error changeset" do
@@ -54,6 +54,30 @@ defmodule Checkout.OrdersTest do
     test "change_cart/1 returns a cart changeset" do
       cart = cart_fixture()
       assert %Ecto.Changeset{} = Orders.change_cart(cart)
+    end
+
+    test "total/1 returns a float equal total amount of cart items" do
+      cart = cart_fixture()
+
+      # test case 1
+      update_attrs = %{items: %{"GR1" => 3, "SR1" => 1, "CF1" => 1}}
+      assert {:ok, %Cart{} = cart} = Orders.update_cart(cart, update_attrs)
+      assert 22.45 == Orders.total(cart)
+
+      # test case 2
+      update_attrs = %{items: %{"GR1" => 2}}
+      assert {:ok, %Cart{} = cart} = Orders.update_cart(cart, update_attrs)
+      assert 3.11 == Orders.total(cart)
+
+      # test case 3
+      update_attrs = %{items: %{"SR1" => 3, "GR1" => 1}}
+      assert {:ok, %Cart{} = cart} = Orders.update_cart(cart, update_attrs)
+      assert 16.61 == Orders.total(cart)
+
+      # test case 4
+      update_attrs = %{items: %{"GR1" => 1, "CF1" => 3, "SR1" => 1}}
+      assert {:ok, %Cart{} = cart} = Orders.update_cart(cart, update_attrs)
+      assert 30.57 == Orders.total(cart)
     end
   end
 end

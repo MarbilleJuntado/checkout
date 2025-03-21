@@ -6,12 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :checkout, Checkout.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "checkout_test#{System.get_env("MIX_TEST_PARTITION")}",
+  url: "postgres://postgres:postgres@db/checkout_test",
   pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: System.schedulers_online() * 2
+  pool_size: 10,
+  timeout: :infinity
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

@@ -4,10 +4,6 @@ defmodule CheckoutWeb.CartLiveTest do
   import Phoenix.LiveViewTest
   import Checkout.OrdersFixtures
 
-  @create_attrs %{items: %{}}
-  @update_attrs %{items: %{}}
-  @invalid_attrs %{items: nil}
-
   defp create_cart(_) do
     cart = cart_fixture()
     %{cart: cart}
@@ -31,12 +27,12 @@ defmodule CheckoutWeb.CartLiveTest do
       assert_patch(index_live, ~p"/carts/new")
 
       assert index_live
-             |> form("#cart-form", cart: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> element("#add-CF1")
+             |> render_click()
 
       assert index_live
-             |> form("#cart-form", cart: @create_attrs)
-             |> render_submit()
+             |> element("#save-btn")
+             |> render_click()
 
       assert_patch(index_live, ~p"/carts")
 
@@ -48,17 +44,17 @@ defmodule CheckoutWeb.CartLiveTest do
       {:ok, index_live, _html} = live(conn, ~p"/carts")
 
       assert index_live |> element("#carts-#{cart.id} a", "Edit") |> render_click() =~
-               "Edit Cart"
+               "Cart ID"
 
       assert_patch(index_live, ~p"/carts/#{cart}/edit")
 
       assert index_live
-             |> form("#cart-form", cart: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> element("#add-CF1")
+             |> render_click()
 
       assert index_live
-             |> form("#cart-form", cart: @update_attrs)
-             |> render_submit()
+             |> element("#save-btn")
+             |> render_click()
 
       assert_patch(index_live, ~p"/carts")
 
@@ -80,24 +76,24 @@ defmodule CheckoutWeb.CartLiveTest do
     test "displays cart", %{conn: conn, cart: cart} do
       {:ok, _show_live, html} = live(conn, ~p"/carts/#{cart}")
 
-      assert html =~ "Show Cart"
+      assert html =~ "This is a cart record from your database."
     end
 
     test "updates cart within modal", %{conn: conn, cart: cart} do
       {:ok, show_live, _html} = live(conn, ~p"/carts/#{cart}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Cart"
+               "Cart ID"
 
       assert_patch(show_live, ~p"/carts/#{cart}/show/edit")
 
       assert show_live
-             |> form("#cart-form", cart: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> element("#add-CF1")
+             |> render_click()
 
       assert show_live
-             |> form("#cart-form", cart: @update_attrs)
-             |> render_submit()
+             |> element("#save-btn")
+             |> render_click()
 
       assert_patch(show_live, ~p"/carts/#{cart}")
 
