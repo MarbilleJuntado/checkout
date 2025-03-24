@@ -14,6 +14,8 @@ defmodule Checkout.Application do
       {Phoenix.PubSub, name: Checkout.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Checkout.Finch},
+      # Rate limiter
+      CheckoutWeb.RateLimit,
       # Start a worker by calling: Checkout.Worker.start_link(arg)
       # {Checkout.Worker, arg},
       # Start to serve requests, typically the last entry

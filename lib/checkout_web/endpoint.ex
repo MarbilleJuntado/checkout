@@ -49,5 +49,28 @@ defmodule CheckoutWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  # https://github.com/ajvondrak/remote_ip
+  plug RemoteIp
+  plug :rate_limit
   plug CheckoutWeb.Router
+
+  defp rate_limit(conn, _opts) do
+    case CheckoutWeb.RateLimit.hit(
+           {:global, conn.remote_ip},
+           _scale = :timer.seconds(10),
+           _limit = 10
+         ) do
+      {:allow, _count} ->
+        conn
+
+      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+      {:deny, retry_after_ms} ->
+        retry_after_seconds = div(retry_after_ms, 1000)
+
+        conn
+        |> put_resp_header("retry-after", "#{retry_after_seconds}")
+        |> send_resp(429, "You hit the rate limit. Try again in #{retry_after_seconds} seconds.")
+        |> halt()
+    end
+  end
 end
